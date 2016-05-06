@@ -26,3 +26,9 @@ body {
 .x.axis path {
   display: none;
 }
+
+.chart {
+  width: 100%;
+  height: 100%;
+  overflow: none;
+}
