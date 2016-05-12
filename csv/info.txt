@@ -1,0 +1,10 @@
+Selitykset esim. piste-notaatiolle:
+
+0.0 Magnitude less than half of unit employed (not working properly in PC-Axis)
+"." Category not applicable
+".." Data not available or too uncertain for presentation
+"..." Data subject to secrecy
+"...." Magnitude nil (do not use a dash!)
+"....."
+"......"
+"-" Magnitude nil (do not use in PC-Axis because it is interpreted as zero).
