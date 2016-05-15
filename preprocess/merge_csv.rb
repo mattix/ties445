@@ -68,7 +68,7 @@ def append_csv(file, merged_csv)
       line_header = row[0].encode('utf-8')
       row_array = []
       row_array << line_header
-      (header_length -1).times do
+      (header_length - 1).times do
         row_array << nil
       end
       row.drop(1).each do |element|
