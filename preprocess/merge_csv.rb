@@ -56,7 +56,6 @@ def append_csv(file, merged_csv)
 
   CSV.foreach(file, col_sep: ";", encoding: "ISO8859-1") do |row|
     if headers
-      i = 0
       row.each do |element|
         unless element.nil?
           merged_csv[0] << element.to_i
