@@ -36,11 +36,95 @@
           </ul>
         </section>
         <section>
-          <h1>Algorithms</h1>
-          <ul>
-            <li>Something about algorithms</li>
-            <li>...</li>
-          </ul>
+          <section>
+            <h1>Algorithms</h1>
+            <ul>
+              <li>Mixed Mathlab, Ruby and C#</li>
+              <li>Visualizations made mainly with <a href="https://d3js.org">d3js</a></li>
+            </ul>
+          </section>
+          <section>
+            <h1>Preprocessing (mathlab)</h1>
+            <pre>
+              clear;
+              CSV1 = dlmread('../csv/1891-1950.csv', ';');
+              [l, w] = size(CSV1);
+
+              FIXED = eye(l, w * 5 - 4);
+
+              FIXED(1,1) = 2;
+
+              % Fix headers
+              for i = 2:w
+                years = strsplit(strrep(num2str(CSV1(1,i)), 'i', ''), '-');
+                for j = 1:5
+                  indx = ((i - 1) * 5 - 4) + j;
+                  FIXED(1, indx) = str2num(years{1}) + j - 1;
+                end
+              end
+
+              for i = 2:l
+                FIXED(i, 1) = CSV1(i, 1);
+                for j = 2 : w - 1
+                  start_value = CSV1(i, j); end_value = CSV1(i, j + 1);
+                  c = (j * 5 - 4); s = (end_value - start_value) / 5.0;
+                  for h = 1:5
+                    FIXED(i, c + h) = start_value + (h - 1) * s;
+                  end
+                end
+              end
+            </pre>
+          </section>
+          <section>
+            <h1>Preprocessing (ruby)</h1>
+            <pre>
+              def read_ranged_csv(file)
+              fixed_csv = []
+              headers = true
+
+              CSV.foreach(file, col_sep: ";", encoding: "ISO8859-1") do |row|
+                row_array = []
+                if headers
+                  i = 0
+                  row.each do |element|
+                    unless element.nil?
+                      start_year = element.split('-')[0].to_i
+                      5.times do |j|
+                        row_array[i * 5 + j - 4] = start_year + j
+                      end
+                    end
+                    i += 1
+                  end
+                  headers = false
+                else
+                  i = 0
+                  row_array << row[0].encode('utf-8')
+                  for i in 1..(row.length - 1)
+                    unless numeric(row[i])
+                      5.times do
+                        row_array << row[i]
+                      end
+                    else
+                      start_value = row[i + 1].to_f
+                      step = (start_value - row[i].to_f) / 5.0
+                      5.times do |j|
+                        row_array[i * 5 + j - 4] = (start_value + j * step).round(1)
+                      end
+                    end
+                    i += 1
+                  end
+                end
+                fixed_csv << row_array
+              end
+              fixed_csv
+            end
+            </pre>
+          </section>
+          <section>
+            <h1>Further</h1>
+            <p>All scripts, sources and this presentation are found in our Github page</p>
+            <p><a href="https://github.com/mattix/ties445">https://github.com/mattix/ties445</a></p>
+          </section>
         </section>
         <section>
           <section>
