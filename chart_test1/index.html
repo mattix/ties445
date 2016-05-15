@@ -26,29 +26,36 @@ body {
 
 </style>
 <body>
-<script src="https://d3js.org/d3.v4.0.0-alpha.40.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
 var margin = {top: 20, right: 80, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var parseDate = d3.timeParse("%Y");
+var parseDate = d3.time.format("%Y").parse;
 
-var x = d3.scaleLinear()
+var x = d3.time.scale()
     .range([0, width]);
 
-var y = d3.scaleLinear()
+var y = d3.scale.linear()
     .range([height, 0]);
 
-var color = d3.scaleCategory10();
+var color = d3.scale.category10();
 
-var xAxis = d3.axisBottom(x);
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
 
-var yAxis = d3.axisLeft(y);
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
 
-var line = d3.line()
-    .defined(function(d) { return d.deathCount; })
+var line = d3.svg.line()
+    .interpolate("basis")
+    .defined(function(d) { 
+      return d.deathCount;
+    })
     .x(function(d) { return x(d.year); })
     .y(function(d) { return y(d.deathCount); });
 
@@ -58,7 +65,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("merged_1891-1985_clean.csv", function(error, data) {
+d3.csv("transpose_merged_1891-1985_clean_valid.csv", function(error, data) {
   if (error) throw error;
 
   color.domain(d3.keys(data[0]).filter(function(key) { return key !== "year"; }));
