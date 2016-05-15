@@ -35,7 +35,11 @@ def read_ranged_csv(file)
           start_value = row[i + 1].to_f
           step = (start_value - row[i].to_f) / 5.0
           5.times do |j|
-            row_array[i * 5 + j - 4] = (start_value + j * step).round(1)
+            value_index = i * 5 + j - 4
+            row_array[value_index] = (start_value + j * step).round(1)
+            if row_array[value_index] < 0.0
+              row_array[value_index] = 0.0
+            end
           end
         end
         i += 1
