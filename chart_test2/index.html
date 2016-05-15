@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.dot {
+  fill: white;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.0.0-alpha.40.min.js"></script>
+<script>
+
+
+var margin = {top: 40, right: 40, bottom: 40, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var parseDate = d3.timeParse("%Y");
+
+var color = d3.scaleCategory10();
+
+var x = d3.scaleLinear()
+    .range([0, width]);
+
+var y = d3.scaleLinear()
+    .range([height, 0]);
+
+var line = d3.line()
+    .defined(function(d) { return d; })
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); });
+
+d3.csv("merged_1891-1985_clean.csv", function(error, data) {
+  if (error) throw error;
+
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "year"; }));
+
+  data.forEach(function(d) {
+    d.year = parseDate(d.year);
+  });
+
+  var causeOfDeaths = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {year: d.year, deathCount: d[name] ? +d[name] : null};
+      })
+    };
+  });
+
+  var svg = d3.select("body").append("svg")
+      .datum(data)
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(d3.axisLeft(y));
+
+  svg.append("path")
+      .attr("class", "line")
+      .attr("d", line);
+
+  svg.selectAll(".dot")
+      .data(data.filter(function(d) { return d; }))
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("cx", line.x())
+      .attr("cy", line.y())
+      .attr("r", 3.5);
+});
+
+</script>
