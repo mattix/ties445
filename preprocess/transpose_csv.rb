@@ -1,4 +1,5 @@
 #!/bin/ruby
+require 'csv'
 abort("No filename given or file does not exist") if (ARGV[0].nil? || !File.exist?(ARGV[0]))
 
 csv_matrix = []
