@@ -1,6 +1,12 @@
 #!/bin/ruby
 require 'csv'
-abort("No filename given or file does not exist") if (ARGV[0].nil? || !File.exist?(ARGV[0]))
+
+def help
+  puts "Usage:"
+  puts "ruby transpose_csv.rb [INPUT_FILE] [SEPARATOR, (optional)]"
+end
+
+abort(help) if (ARGV[0].nil?
 
 csv_matrix = []
 
