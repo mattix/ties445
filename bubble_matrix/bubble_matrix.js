@@ -112,7 +112,7 @@ function type(d) {
     parsed.total = 0;
     for (var property in d) {
         if (d.hasOwnProperty(property) && property !== '') {
-            var amount = parseInt(d[property]);
+            var amount = parseFloat(d[property]);
             if (isNaN(amount)) amount = 0;
             var yearData = [property, amount];
             parsed.years.push(yearData);
