@@ -9,27 +9,26 @@ function truncate(str, maxLength, suffix) {
 
 var maximumAmount = 0;
 
-var margin = {top: 20, right: 200, bottom: 0, left: 25},
-	width = 700,
+var margin = {top: 20, right: 400, bottom: 0, left: 25},
+	width = 1000,
 	height = 900;
 
 var start_year = 1891,
-	end_year = 1950;
+	end_year = 1985;
 
 var c = d3.scale.category20c();
 
 var x = d3.scale.linear()
 	.range([0, width]);
 
+var formatYears = function(year) {
+    return year.toString();// + '-' + (year + 4).toString();
+};
+
 var xAxis = d3.svg.axis()
 	.scale(x)
-    .tickValues([1891,1896,1901,1906,1911,1916,1921,1926,1931,1936,1941,1946])
-	.orient("top");
-
-var formatYears = function(year) {
-        return year.toString() + '-' + (year + 4).toString();
-};
-xAxis.tickFormat(formatYears);
+	.orient("top")
+    .tickFormat(formatYears);
 
 var svg = d3.select("body").append("svg")
 	.attr("width", width + margin.left + margin.right)
@@ -38,9 +37,9 @@ var svg = d3.select("body").append("svg")
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var dsv = d3.dsv(';', 'text/plain');
-dsv('../csv/1891-1950.csv', type, function(error, data) {
+var csv = d3.csv('../csv/merged_1891-1985_clean_valid.csv', type, function(error, data) {
     x.domain([start_year, end_year]);
+    xAxis.tickValues(data[0].years.map(function (item) { return parseInt(item[0]); }));
 	var xScale = d3.scale.linear()
 		.domain([start_year, end_year])
 		.range([0, width]);
@@ -68,7 +67,9 @@ dsv('../csv/1891-1950.csv', type, function(error, data) {
 			.range([2, 20]);
 
 		circles
-			.attr("cx", function(d, i) { return xScale(parseInt(d[0])); })
+			.attr("cx", function(d, i) { 
+            return xScale(parseInt(d[0])); 
+            })
 			.attr("cy", j*30+20)
 			.attr("r", function(d) { 
             return rScale(d[1]); })
@@ -107,12 +108,14 @@ dsv('../csv/1891-1950.csv', type, function(error, data) {
 
 function type(d) {
     var parsed = {};
-    parsed.name = d[''];
+    parsed.name = d.year;
     parsed.years = [];
     parsed.total = 0;
+    
+    var counter = 0;
     for (var property in d) {
-        if (d.hasOwnProperty(property) && property !== '') {
-            var amount = parseInt(d[property]);
+        if (d.hasOwnProperty(property) && property !== 'year' && parseInt(property) % 5 === 0) {
+            var amount = parseFloat(d[property]);
             if (isNaN(amount)) amount = 0;
             var yearData = [property, amount];
             parsed.years.push(yearData);
