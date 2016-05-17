@@ -1,0 +1,8 @@
+var rScale = d3.scale.linear()  //Create a scaling function
+  .domain([0, maximumAmount])
+  .range([2, 20]);
+
+circles
+  .attr("r", function(d) { 
+    return rScale(d[1]);        //Apply the scaling function
+  });

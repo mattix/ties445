@@ -1,0 +1,4 @@
+d3.select("text")
+  .on("mouseover", mouseover)
+  .on("mouseout", mouseout);
+  //mouseover and mouseout are regular DOM events

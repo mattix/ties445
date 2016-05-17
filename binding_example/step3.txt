@@ -1,0 +1,6 @@
+for (var j = 0; j < data.length; j++) {
+  var g = svg.append("g");              //Initialize parent element for circles (a row)
+  var circles = g.selectAll("circle")   //Select each circle-type child of the parent
+    .data(data[j]['years'])             //Attach data entry
+    .enter()                            //Create a circle "placeholder" for each parent (g)
+    .append("circle");                  //Append the circle to the parent

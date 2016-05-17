@@ -1,0 +1,19 @@
+function preprocess(dataRow) {
+    var preprocessed = {};
+    preprocessed.name = dataRow.year;
+    preprocessed.years = [];
+    preprocessed.total = 0;
+    
+    var counter = 0;
+    for (var property in dataRow) {
+        if (dataRow.hasOwnProperty(property) && property !== 'year') {
+            var amount = parseFloat(dataRow[property]);
+            if (isNaN(amount)) amount = 0;
+            var yearData = [property, amount];
+            preprocessed.years.push(yearData);
+            preprocessed.total += amount;
+            if (amount > maximumAmount) maximumAmount = amount;
+        }
+    }
+    return preprocessed;
+}

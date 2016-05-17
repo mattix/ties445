@@ -1,0 +1,6 @@
+function mouseover() {
+  //Select parent and change child circles to text
+  var g = d3.select(this).node().parentNode;
+  d3.select(g).selectAll("circle").style("display","none");
+  d3.select(g).selectAll("text.value").style("display","block");
+}

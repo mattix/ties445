@@ -1,0 +1,3 @@
+var csv = d3.csv('../csv/file.csv', preprocess, function(error, data) {
+  //data-variable now contains the csv data as an array of objects
+});
