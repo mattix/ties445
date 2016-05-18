@@ -1,4 +1,4 @@
 function mouseover() {
   //now the relevant DOM element
-  //is in the "this" variable
+  //is in the "this" context variable
 }
